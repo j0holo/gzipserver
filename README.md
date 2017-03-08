@@ -57,31 +57,29 @@ func main() {
 	mux := http.NewServeMux()
 
 	index := &gzipserver.Response{
-		Content: "<h1>Welcome to this home page.</h1>",
+		Content: []byte("<h1>Welcome to this webpage.</h1>"),
 	}
 
-	m.Handle("/", index)
+	mux.Handle("/", index)
 
 	tlsConf := &tls.Config{
 		PreferServerCipherSuites: true,
 	}
 
-	srv := gzipserver.NewGzipServer(&gzipserver.ServerConfig{
+	srv := http.Server{
 		Addr:           "127.0.0.1:8080",
 		ReadTimeout:    5 * time.Second,
 		WriteTimeout:   5 * time.Second,
 		IdleTimeout:    20 * time.Second,
-		Handler:        m,
+		Handler:        mux,
 		MaxHeaderBytes: 1 << 20,
 		TLSConfig:      tlsConf,
 		TLSNextProto:   nil,
 		ConnState:      nil,
 		ErrorLog:       nil,
-	})
+	}
 
-	// If you don't want to serve a SSL/TLS connection you can use
-	// log.Fatal(srv.ListenAndServe()) and set TLSConfig to nil.
-	log.Fatal(srv.ListenAndServeTLS("cert.pem", "key.pem"))
+	log.Fatal(srv.ListenAndServeTLS("server.crt", "server.key"))
 }
 ```
 

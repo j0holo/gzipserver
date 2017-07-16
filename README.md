@@ -6,7 +6,7 @@ GzipServer is a small wrapper around the http.Handler interface to provide autom
 
 You can get the package via:
 
-`$ go get https://github.com/j0holo/gzipServer`
+`$ go get github.com/j0holo/gzipServer`
 
 Don't foget to set your GOPATH before running go get.
 
